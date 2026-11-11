@@ -80,6 +80,26 @@ npm start
 
 > 本服务默认没有访问密码，同一 Wi-Fi 下的其他人也可能打开。不要在公司、学校公共 Wi-Fi 等环境使用；隐私文件请放进「隐私空间」。
 
+## 在 Android 平板 / 手机上本地运行（Termux）
+
+不想依赖电脑时，可以把服务直接跑在 Android 设备上：
+
+1. 从 [F-Droid](https://f-droid.org/packages/com.termux/) 安装 Termux（不要用 Google Play 版），需要开机自启再装 Termux:Boot
+2. 打开 Termux，执行：
+
+```bash
+pkg install -y git
+git clone https://github.com/luobutu19-rgb/personal-resource-hub.git ~/personal-resource-hub
+cd ~/personal-resource-hub
+bash scripts/termux-install.sh
+```
+
+3. 平板浏览器打开 `http://localhost:5178`；同一 Wi-Fi 的其他设备用 `http://平板IP:5178`
+4. 保持后台运行：执行 `termux-wake-lock`，并在系统设置里把 Termux 的电池优化设为「不限制」
+5. 开机自启：安装 Termux:Boot 后创建 `~/.termux/boot/resource-hub.sh`，内容为 `termux-wake-lock` 加 `cd ~/personal-resource-hub && npm start`
+
+数据保存在 `~/personal-resource-hub/data`，与电脑上的数据互相独立；可以直接复制 `data/` 目录在设备间迁移。
+
 ## 自动整理是怎么工作的
 
 **类型（7 类）**：图片、文档、视频、音频、压缩包、代码、其他，按扩展名判断。

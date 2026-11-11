@@ -78,6 +78,19 @@ If it does not load: allow the app in the Windows firewall prompt (private netwo
 
 > The server has no built-in authentication — anyone on the same network can open it. Do not use it on public or shared Wi-Fi; put private files in the vault.
 
+### Run it on an Android tablet (Termux)
+
+The server can also live entirely on the tablet, without a computer:
+
+```bash
+pkg install -y git
+git clone https://github.com/luobutu19-rgb/personal-resource-hub.git ~/personal-resource-hub
+cd ~/personal-resource-hub
+bash scripts/termux-install.sh
+```
+
+Then open `http://localhost:5178` on the tablet, or `http://<tablet-ip>:5178` from other devices on the same Wi-Fi. Run `termux-wake-lock` and disable battery optimization for Termux to keep it alive. Requires Termux from F-Droid (not the Play Store build).
+
 ## How classification works
 
 - **Type (7)**: image, document, video, audio, archive, code, other — determined by extension
