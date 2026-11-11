@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>我的资源站</title>
+  <meta name="description" content="个人资源集中站：把文件或文件夹拖进来，自动按主题和类型整理。">
+  <meta name="theme-color" content="#FAF9F6">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/icons/icon-180.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="资源站">
+  <script src="/js/theme-sync.js"></script>
+  <script src="/js/monet.js"></script>
+  <link rel="stylesheet" href="/styles.css?v=20261111b">
+</head>
+<body>
+  <div class="ambient" aria-hidden="true">
+    <i class="a1"></i>
+    <i class="a2"></i>
+    <i class="a3"></i>
+  </div>
+  <div class="app">
+    <aside class="sidebar" id="sidebar" aria-label="导航">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg class="icon"><use href="/icons.svg#i-logo"></use></svg>
+        </span>
+        <div class="brand-text">
+          <strong>我的资源站</strong>
+          <span>personal library</span>
+        </div>
+        <button class="icon-btn only-mobile" id="closeSidebar" type="button" aria-label="关闭导航">
+          <svg class="icon"><use href="/icons.svg#i-close"></use></svg>
+        </button>
+      </div>
+
+      <nav class="side-section" aria-label="文件范围">
+        <div class="side-list">
+          <button class="side-item" type="button" data-filter="all" id="navAll">
+            <svg class="icon"><use href="/icons.svg#i-grid"></use></svg>
+            <span>全部文件</span>
+            <span class="count" id="countAll">0</span>
+          </button>
+          <button class="side-item" type="button" data-filter="favorite">
+            <svg class="icon"><use href="/icons.svg#i-star"></use></svg>
+            <span>收藏</span>
+            <span class="count" id="countFav">0</span>
+          </button>
+          <a class="side-item" href="/orbit.html">
+            <svg class="icon"><use href="/icons.svg#i-sparkles"></use></svg>
+            <span>AI 助手</span>
+            <span class="count">小陪</span>
+          </a>
+          <a class="side-item" href="/cards.html">
+            <svg class="icon"><use href="/icons.svg#i-cards"></use></svg>
+            <span>记忆卡片</span>
+            <span class="count">Anki</span>
+          </a>
+          <a class="side-item" href="/exam.html">
+            <svg class="icon"><use href="/icons.svg#i-exam"></use></svg>
+            <span>考试中心</span>
+            <span class="count">初三</span>
+          </a>
+          <button class="side-item" type="button" id="vaultBtn">
+            <svg class="icon"><use href="/icons.svg#i-lock"></use></svg>
+            <span>隐私空间</span>
+            <span class="count" id="vaultCount">0</span>
+          </button>
+        </div>
+      </nav>
+
+      <div class="side-section">
+        <div class="side-head">
+          <span>主题</span>
+          <button class="link-btn" id="manageTopics" type="button">重命名</button>
+        </div>
+        <div class="side-list" id="topicNav"></div>
+      </div>
+
+      <div class="side-section">
+        <div class="side-head"><span>类型</span></div>
+        <div class="side-list" id="categoryNav"></div>
+      </div>
+
+      <div class="side-section">
+        <div class="side-head"><span>标签</span></div>
+        <div class="tag-cloud" id="tagCloud"></div>
+      </div>
+
+      <div class="side-foot">
+        <div class="storage-card">
+          <div class="storage-top"><span>已用空间</span><strong id="storageSize">0 B</strong></div>
+          <div class="storage-bar"><i id="storageBar"></i></div>
+          <p id="storageHint">把资料拖进来，自动整理</p>
+        </div>
+        <div class="side-actions">
+          <button class="ghost-btn" id="settingsBtnSide" type="button">
+            <svg class="icon"><use href="/icons.svg#i-sliders"></use></svg>设置
+          </button>
+          <button class="ghost-btn" id="themeBtnSide" type="button">
+            <svg class="icon"><use href="/icons.svg#i-moon"></use></svg><span>深色模式</span>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <div class="scrim" id="sidebarScrim" hidden></div>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="icon-btn only-mobile" id="menuBtn" type="button" aria-label="打开导航">
+          <svg class="icon"><use href="/icons.svg#i-menu"></use></svg>
+        </button>
+
+        <div class="search-box">
+          <svg class="icon"><use href="/icons.svg#i-search"></use></svg>
+          <input id="searchInput" type="search" placeholder="搜索标题、标签或摘要…" autocomplete="off" aria-label="搜索文件">
+          <button class="search-clear" id="searchClear" type="button" aria-label="清空搜索" hidden>
+            <svg class="icon"><use href="/icons.svg#i-close"></use></svg>
+          </button>
+          <kbd>/</kbd>
+        </div>
+
+        <div class="topbar-actions">
+          <button class="btn ai-glow ai-search-btn" id="aiSearchBtn" type="button" title="AI 聚焦搜索（Ctrl / ⌘ + K）">
+            <svg class="icon"><use href="/icons.svg#i-sparkles"></use></svg>
+            <span class="btn-label">AI 搜索</span>
+          </button>
+          <label class="select-wrap" title="排序">
+            <select id="sortSelect" aria-label="排序方式">
+              <option value="newest">最新上传</option>
+              <option value="name">名称</option>
+              <option value="size">大小</option>
+            </select>
+          </label>
+          <button class="icon-btn" id="selectBtn" type="button" title="多选文件" aria-label="多选文件">
+            <svg class="icon"><use href="/icons.svg#i-check"></use></svg>
+          </button>
+          <button class="icon-btn" id="layoutBtn" type="button" title="切换布局" aria-label="切换布局">
+            <svg class="icon"><use href="/icons.svg#i-list"></use></svg>
+          </button>
+          <button class="icon-btn" id="themeBtn" type="button" title="切换主题" aria-label="切换主题">
+            <svg class="icon"><use href="/icons.svg#i-moon"></use></svg>
+          </button>
+          <button class="icon-btn" id="settingsBtn" type="button" title="设置" aria-label="设置">
+            <svg class="icon"><use href="/icons.svg#i-sliders"></use></svg>
+          </button>
+          <div class="menu-wrap">
+            <button class="btn primary upload-btn" id="uploadBtn" type="button">
+              <svg class="icon"><use href="/icons.svg#i-upload"></use></svg>
+              <span class="btn-label">上传</span>
+            </button>
+            <div class="upload-menu" id="uploadMenu" hidden>
+              <button type="button" data-upload="files">
+                <svg class="icon"><use href="/icons.svg#i-file"></use></svg>选择文件
+              </button>
+              <button type="button" data-upload="folder">
+                <svg class="icon"><use href="/icons.svg#i-folder"></use></svg>选择文件夹
+              </button>
+              <button type="button" data-upload="images">
+                <svg class="icon"><use href="/icons.svg#i-image"></use></svg>上传照片 / 截图
+              </button>
+              <button type="button" data-collect>
+                <svg class="icon"><use href="/icons.svg#i-link"></use></svg>收藏网页链接
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="content">
+        <div class="offline-banner" id="offlineBanner" hidden>
+          <svg class="icon" aria-hidden="true"><use href="/icons.svg#i-refresh"></use></svg>
+          <span id="offlineText">离线模式 · 显示已缓存的资源</span>
+        </div>
+        <section class="pending-panel" id="pendingPanel" hidden aria-label="手机暂存">
+          <div class="pending-head">
+            <div>
+              <p class="eyebrow">手机暂存</p>
+              <h2 id="pendingTitle">0 项待同步</h2>
+            </div>
+            <button class="btn ghost" id="syncPendingBtn" type="button">立即同步</button>
+          </div>
+          <div class="pending-list" id="pendingList"></div>
+        </section>
+        <section class="page-head">
+          <div class="page-head-text">
+            <p class="eyebrow" id="pageEyebrow">按主题浏览</p>
+            <h1 id="pageTitle">全部资源</h1>
+            <p class="page-sub" id="pageSub">拖入文件或文件夹，自动按主题和类型整理</p>
+          </div>
+          <div class="view-toggle" id="viewToggle" role="tablist" aria-label="浏览方式">
+            <button type="button" data-view="topic" role="tab">按主题</button>
+            <button type="button" data-view="category" role="tab">按类型</button>
+          </div>
+        </section>
+
+        <section class="topic-panel" id="topicPanel" hidden aria-label="主题概览"></section>
+        <section class="topic-strip" id="topicStrip" aria-label="主题总览"></section>
+        <section class="pixel-board" id="pixelBoard" aria-label="今日概览">
+          <div class="pb-screen">
+            <canvas id="pbCanvas" width="224" height="224" aria-hidden="true"></canvas>
+            <div class="pb-overlay">
+              <b id="pbBig">—</b>
+              <span id="pbLabel">天后考试</span>
+            </div>
+          </div>
+          <div class="pb-side">
+            <div class="pb-head">
+              <span class="pb-title">今日概览</span>
+              <span class="pb-live"><i></i><span id="pbClock">--:--</span></span>
+            </div>
+            <p class="pb-sub" id="pbSub">正在读取…</p>
+            <div class="pb-rows" id="pbRows"></div>
+          </div>
+        </section>
+        <div class="chip-bar" id="chipBar" aria-label="筛选条件"></div>
+        <section class="file-area layout-grid" id="fileArea" aria-label="文件列表"></section>
+      </div>
+    </main>
+  </div>
+
+  <a class="ai-orb" href="/orbit.html" aria-label="打开 AI 助手" title="小陪 · AI 助手">
+    <span class="ai-orb-glow" aria-hidden="true"></span>
+    <svg class="icon"><use href="/icons.svg#i-sparkles"></use></svg>
+    <span class="ai-orb-tip">小陪</span>
+  </a>
+
+  <button class="fab only-mobile" id="fabUpload" type="button" aria-label="上传文件">
+    <svg class="icon"><use href="/icons.svg#i-plus"></use></svg>
+  </button>
+
+  <div class="bulk-bar" id="bulkBar" hidden>
+    <span class="bulk-count" id="bulkCount">已选 0 项</span>
+    <button type="button" data-bulk="all">全选</button>
+    <button type="button" data-bulk="fav">收藏</button>
+    <button type="button" data-bulk="unfav">取消收藏</button>
+    <button type="button" data-bulk="move">移动主题</button>
+    <button type="button" data-bulk="tag">加标签</button>
+    <button type="button" data-bulk="vault">移入隐私</button>
+    <button type="button" data-bulk="delete" class="danger">删除</button>
+    <button type="button" data-bulk="cancel" class="bulk-close" aria-label="退出多选">×</button>
+  </div>
+
+  <div class="drop-overlay" id="dropOverlay" hidden>
+    <div class="drop-card">
+      <span class="drop-icon"><svg class="icon"><use href="/icons.svg#i-upload"></use></svg></span>
+      <strong>松手即可上传</strong>
+      <span>文件或整个文件夹都会自动归类</span>
+    </div>
+  </div>
+
+  <input type="file" id="fileInput" multiple hidden>
+  <input type="file" id="folderInput" webkitdirectory directory multiple hidden>
+  <input type="file" id="imageInput" accept="image/*" multiple hidden>
+
+  <div id="spotlightRoot"></div>
+  <div id="modalRoot"></div>
+  <div id="drawerRoot"></div>
+  <div class="toast-root" id="toastRoot" aria-live="polite"></div>
+
+  <script type="module" src="/js/main.js?v=20261111a"></script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+{
+  "name": "personal-resource-hub",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Self-hosted personal resource hub: drag in files and they are classified by topic and type automatically",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luobutu19-rgb/personal-resource-hub.git"
+  },
+  "homepage": "https://github.com/luobutu19-rgb/personal-resource-hub#readme",
+  "keywords": [
+    "express",
+    "pwa",
+    "flashcards",
+    "study",
+    "self-hosted",
+    "openai"
+  ],
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "fflate": "^0.8.3",
+    "multer": "^2.0.2",
+    "pdf-parse": "^1.1.1",
+    "qrcode-terminal": "^0.12.0"
+  }
+}

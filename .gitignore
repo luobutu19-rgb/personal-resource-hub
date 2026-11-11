@@ -1,0 +1,13 @@
+node_modules/
+data/
+logs/
+.screenshots/
+.trae/
+*.log
+vbs-debug.txt
+vbs-ok.txt
+.DS_Store
+Thumbs.db
+*.zip
+.env
+.env.*
